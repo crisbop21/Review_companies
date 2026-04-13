@@ -1,0 +1,65 @@
+# Step 1 (Transcript Ingestion) eval rubric.
+#
+# Applied by tests/evals/run_evals.py against a frozen pipeline output.
+# Scoring uses Claude Opus as LLM-judge. Each criterion returns 1-5; the
+# rubric's PASS threshold is the weighted sum.
+#
+# Keep criteria independent and concrete. Vague criteria ("is this good?")
+# produce noisy scores that don't track prompt-version changes.
+
+version: 0.1.0
+step: step1_ingest
+judge_model: opus
+pass_threshold: 3.8  # weighted average (1-5)
+
+criteria:
+  - id: claim_coverage
+    weight: 0.30
+    question: >
+      Did the output extract at least 15 material claims from the transcript,
+      covering all of: revenue, margins, growth, guidance, strategic, capex?
+    scale:
+      1: fewer than 8 claims OR missing 3+ categories
+      3: 15+ claims, missing 1 category
+      5: 20+ claims, all 6 categories represented
+
+  - id: concept_identification
+    weight: 0.25
+    question: >
+      For each claim, does the output list the concepts a newcomer would
+      need explained? Concepts should be specific terms, not generic words.
+    scale:
+      1: concepts lists are empty or full of generic words ("money", "growth")
+      3: most claims have concept lists with mostly-specific terms
+      5: every claim has 2-5 specific, teachable concepts
+
+  - id: glossary_linkage
+    weight: 0.20
+    question: >
+      Does the concept_glossary correctly link each term back to its parent
+      claims (via claim IDs)?
+    scale:
+      1: glossary missing or links broken
+      3: most terms link to at least one claim
+      5: every term links to every claim it appears in
+
+  - id: category_accuracy
+    weight: 0.15
+    question: >
+      Are claim category tags (revenue/margins/growth/guidance/strategic/capex)
+      assigned correctly? A "we expect 20% revenue growth in FY26" is guidance,
+      not growth.
+    scale:
+      1: categories are frequently wrong
+      3: most categories correct, some ambiguous
+      5: every category tag is defensible
+
+  - id: industry_agnostic
+    weight: 0.10
+    question: >
+      Does the output work for both tech and fintech transcripts using the
+      same prompt, without producing tech-flavored concepts for a bank?
+    scale:
+      1: prompt only works on one industry
+      3: works but analogies leak between industries
+      5: output quality is identical across industries
