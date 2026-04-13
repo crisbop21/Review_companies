@@ -1,0 +1,55 @@
+version: 0.1.0
+step: step3_critique
+judge_model: opus
+pass_threshold: 3.7
+
+criteria:
+  - id: critique_count_and_lens_coverage
+    weight: 0.25
+    question: >
+      Are there 8–12 critiques covering all five lenses (metric_selection,
+      omission, assumption_testing, historical_precedent, counter_evidence)?
+    scale:
+      1: fewer than 5 critiques OR 2+ lenses missing
+      3: 8-12 critiques, 1 lens missing
+      5: 8-12 critiques, all 5 lenses represented
+
+  - id: evidence_quality
+    weight: 0.25
+    question: >
+      Do at least 3 critiques cite web-searched historical parallels or
+      counter-evidence with specific companies and time periods?
+    scale:
+      1: no specific evidence, vague parallels
+      3: 1-2 critiques cite evidence, rest are generic
+      5: 3+ critiques cite specific, verifiable evidence
+
+  - id: bull_rebuttal_strength
+    weight: 0.20
+    question: >
+      Does every critique include a bull_rebuttal that is credible, not
+      a strawman? A rebuttal like "management will figure it out" fails.
+    scale:
+      1: rebuttals are missing or strawmen
+      3: rebuttals exist but are weak
+      5: every rebuttal is specific and defensible
+
+  - id: severity_calibration
+    weight: 0.15
+    question: >
+      Are severity tags (low/medium/high) calibrated? "High" should be
+      reserved for thesis-changing critiques, not every revenue concern.
+    scale:
+      1: everything is marked high OR low
+      3: severity distribution is plausible with some mismatches
+      5: severity calibration is consistent and defensible
+
+  - id: not_contrarian_for_sport
+    weight: 0.15
+    question: >
+      Are critiques genuinely insightful, not contrarian for sport? A
+      critique must teach something, not just disagree.
+    scale:
+      1: critiques read as reflexive contrarianism
+      3: most critiques are substantive, some are weak
+      5: every critique would make a bull pause and think

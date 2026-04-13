@@ -1,0 +1,56 @@
+version: 0.1.0
+step: step7_memo
+judge_model: opus
+pass_threshold: 3.8
+
+criteria:
+  - id: scoring_calibration
+    weight: 0.30
+    question: >
+      Are bull_score and bear_score calibrated per the 1-10 scale in the
+      prompt? A mediocre company must not get 8; a strong franchise must
+      not get 3. Both must not round to 7.
+    scale:
+      1: scores feel random or flatlined at 7
+      3: scores are directionally right, some lazy picks
+      5: scores are defensible with evidence citations
+
+  - id: kill_condition_specificity
+    weight: 0.25
+    question: >
+      Are all kill conditions measurable — with metric_name,
+      threshold_value, and threshold_direction? Vague conditions fail.
+    scale:
+      1: kill conditions are vague narrative statements
+      3: most specific, some vague
+      5: every kill condition has metric, threshold, and direction
+
+  - id: assumption_distinctness
+    weight: 0.15
+    question: >
+      Are key_assumptions distinct from one another? Two assumptions that
+      are rephrasings of the same idea must not both appear.
+    scale:
+      1: significant overlap between assumptions
+      3: mostly distinct with some overlap
+      5: every assumption is meaningfully different
+
+  - id: size_thesis_consistency
+    weight: 0.15
+    question: >
+      Is suggested_size_pct consistent with (bull_score - bear_score)?
+      bull 8 / bear 3 should suggest a larger size than bull 6 / bear 6.
+    scale:
+      1: size is inconsistent with scores
+      3: size is in the right direction
+      5: size reflects a clear, defensible gap
+
+  - id: memo_text_quality
+    weight: 0.15
+    question: >
+      Does memo_text tell the story coherently in 400-600 words, or does
+      it just restate the JSON fields?
+    scale:
+      1: restates JSON, no narrative
+      3: narrative present but thin
+      5: coherent investment story a PM can read in 60 seconds
