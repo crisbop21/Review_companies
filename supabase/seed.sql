@@ -1,0 +1,3 @@
+-- Seed data is intentionally empty. Runs populate everything via the pipeline.
+-- Add local fixtures here only if you want to hydrate a dev database for UI
+-- work without running the LLM pipeline.

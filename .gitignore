@@ -1,0 +1,42 @@
+# Env / secrets
+.env
+.env.local
+*.pem
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Generated artifacts (not checked in; regenerated from the pipeline)
+audio/
+out/
+*.mp3
+*.wav
+
+# Local eval scratch
+tests/evals/runs/
+tests/evals/scratch/
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
