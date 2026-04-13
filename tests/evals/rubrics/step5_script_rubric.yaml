@@ -1,0 +1,66 @@
+version: 0.1.0
+step: step5_script
+judge_model: opus
+pass_threshold: 3.8
+
+criteria:
+  - id: word_count
+    weight: 0.10
+    question: >
+      Is the total word count between 6,500 and 7,500?
+    scale:
+      1: below 5,500 or above 8,500
+      3: within 6,000-8,000
+      5: within 6,500-7,500
+
+  - id: seven_act_structure
+    weight: 0.15
+    question: >
+      Are all seven acts present with correct headers, and is each act
+      within 15% of its target length?
+    scale:
+      1: acts missing or mislabeled
+      3: all seven present, some lengths off
+      5: all seven present and correctly weighted
+
+  - id: voice_distinctness
+    weight: 0.25
+    question: >
+      Are HOST, BULL, and BEAR genuinely different? HOST must ask
+      "what does that mean?" style questions. BULL must cite numbers.
+      BEAR must pattern-match to history.
+    scale:
+      1: voices bleed together or HOST sounds expert
+      3: voices mostly distinct, occasional drift
+      5: every turn sounds unmistakably like one voice
+
+  - id: interruption_cadence
+    weight: 0.15
+    question: >
+      Does HOST interrupt every ~3 minutes (~225 words) of combined
+      BULL+BEAR speaking? No single speaker goes >90 seconds uninterrupted.
+    scale:
+      1: long speeches with no HOST interruptions
+      3: mostly-good cadence with occasional long speeches
+      5: consistent interruption pattern throughout
+
+  - id: teaching_quality
+    weight: 0.20
+    question: >
+      After Act 2, would a non-finance listener understand this company's
+      business model? Every technical concept has a concrete example
+      within 30 seconds of introduction.
+    scale:
+      1: concepts introduced without explanation
+      3: most concepts explained, some missed
+      5: every concept gets a concrete example immediately
+
+  - id: debate_quality
+    weight: 0.15
+    question: >
+      In Act 4, do BULL and BEAR engage with each other's arguments
+      rather than talking past each other?
+    scale:
+      1: parallel monologues, no engagement
+      3: partial engagement, occasional dodges
+      5: genuine back-and-forth; each concedes real points
