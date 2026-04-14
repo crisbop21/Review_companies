@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
-import streamlit as st
+from ui_components.secrets_bridge import push_secrets_to_env
 
-from ui_components.memo_card import render_memo
+push_secrets_to_env()
+
+import streamlit as st  # noqa: E402
+
+from ui_components.memo_card import render_memo  # noqa: E402
 
 st.title("IC Memo")
 

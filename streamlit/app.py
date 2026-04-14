@@ -4,13 +4,21 @@ Run with::
 
     streamlit run streamlit/app.py
 
+Secrets are read from ``st.secrets`` (``.streamlit/secrets.toml`` locally
+or the Secrets tab on Streamlit Community Cloud) and pushed into
+``os.environ`` so the pipeline's ``Config`` picks them up unchanged.
+
 The home page explains the product; individual workflows live on the
 numbered pages in ``streamlit/pages/``.
 """
 
 from __future__ import annotations
 
-import streamlit as st
+from ui_components.secrets_bridge import push_secrets_to_env
+
+push_secrets_to_env()
+
+import streamlit as st  # noqa: E402  (must come after the secrets bridge)
 
 st.set_page_config(
     page_title="Earnings Podcast Agent",
@@ -48,6 +56,8 @@ with st.sidebar:
     except Exception as exc:
         st.error(f"Config error: {exc}")
         st.info(
-            "Copy `.env.example` to `.env` at the repo root and fill in your "
-            "API keys."
+            "Set your API keys in Streamlit secrets "
+            "(`.streamlit/secrets.toml` locally, or the Secrets tab on "
+            "Streamlit Community Cloud). See "
+            "`.streamlit/secrets.toml.example` for the full list of keys."
         )

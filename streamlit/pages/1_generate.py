@@ -2,13 +2,17 @@
 
 from __future__ import annotations
 
-import time
-from pathlib import Path
+from ui_components.secrets_bridge import push_secrets_to_env
 
-import streamlit as st
+push_secrets_to_env()
 
-from pipeline.orchestrator import run_pipeline
-from pipeline.utils.supabase_client import SupabasePipelineClient
+import time  # noqa: E402
+from pathlib import Path  # noqa: E402
+
+import streamlit as st  # noqa: E402
+
+from pipeline.orchestrator import run_pipeline  # noqa: E402
+from pipeline.utils.supabase_client import SupabasePipelineClient  # noqa: E402
 
 st.title("Generate")
 
